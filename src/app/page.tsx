@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, CalendarDays, Check, Globe2, GraduationCap, Mail, MessageCircle, Medal, AtSign, PlayCircle } from "lucide-react";
+import { ArrowRight, ArrowUpRight, CalendarDays, Check, Globe2, GraduationCap, Mail, MessageCircle, AtSign, PlayCircle } from "lucide-react";
 import { CategoryIcon } from "@/components/CategoryIcon";
+import { CategoryCard } from "@/components/CategoryCard";
 import { Header } from "@/components/Header";
 import { Footer, CONTACT } from "@/components/Footer";
 import { NeuralArt } from "@/components/NeuralArt";
@@ -42,7 +43,7 @@ function Price({ p }: { p: Paket }) {
 }
 
 export default async function Home() {
-  const s = await getSections(["identitas", "jadwal_kegiatan", "timeline", "awards", "pendaftaran", "guidebook"]);
+  const s = await getSections(["identitas", "jadwal_kegiatan", "timeline", "pendaftaran", "guidebook"]);
   const id = s?.identitas;
   const reg = s?.pendaftaran;
   const state = registrationState(id);
@@ -189,14 +190,8 @@ export default async function Home() {
                 lead="Pick the field that fits your project. Every category is judged by specialists in that area." />
               <ul className="cards">
                 {categories.map((k, i) => (
-                  <li key={k.id} className="card">
-                    <div className="card-top">
-                      <CategoryIcon name={k.ikon} />
-                      <span className="mono-num">{String(i + 1).padStart(2, "0")}</span>
-                    </div>
-                    <h3>{k.nama}</h3>
-                    {k.keterangan && <p>{k.keterangan.trim()}</p>}
-                  </li>
+                  <CategoryCard key={k.id} icon={<CategoryIcon name={k.ikon} />} num={String(i + 1).padStart(2, "0")}
+                    title={k.nama} text={(k.keterangan ?? "").trim()} />
                 ))}
               </ul>
             </div>
@@ -264,34 +259,6 @@ export default async function Home() {
             </div>
           </section>
         )}
-
-        {/* ── Awards ── */}
-        {s?.awards?.length ? (
-          <section id="awards" className="section">
-            <div className="shell">
-              <SectionHead num={num()} label="Awards" title="Recognition for every finalist"
-                lead="Medals are awarded by final judging score." />
-              <ul className="awards">
-                {s.awards.map((a) => {
-                  const lo = Number(a.nilai_min), hi = Number(a.nilai_maks);
-                  return (
-                    <li key={a.nama} className={`award award-${a.nama.toLowerCase()}`}>
-                      <span className="medal"><Medal size={26} /></span>
-                      <h3>{a.nama}</h3>
-                      <p className="award-score"><span className="mono">{lo}–{hi}</span> points</p>
-                      <div className="range" aria-hidden="true">
-                        <span style={{ left: `${lo}%`, width: `${Math.max(2, hi - lo)}%` }} />
-                      </div>
-                      <p className="award-benefit">
-                        {a.manfaat.split("|").map((x) => x.trim()).filter(Boolean).join(" + ")}
-                      </p>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          </section>
-        ) : null}
 
         {/* ── CTA ── */}
         <section className="section section-tight">

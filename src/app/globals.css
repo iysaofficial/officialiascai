@@ -204,9 +204,11 @@ p { margin: 0; }
 .footer-org, .footer-copy { font-size: 14px; }
 
 /* ── organiser logo in nav + category icons ── */
-.brand-logo {
-  height: 40px; width: auto; display: block;
-  border-radius: 8px; background: #fff; padding: 2px 4px;
+/* Organiser logo, transparent PNG, no backdrop. The IYSA lockup has navy text
+   that disappears on the dark header, so dark mode shows it in white. */
+.brand-logo { height: 40px; width: auto; display: block; }
+@media (prefers-color-scheme: dark) {
+  .brand-logo { filter: brightness(0) invert(1); }
 }
 .brand-text.with-logo { padding-left: 12px; border-left: 1px solid var(--line); }
 @media (max-width: 420px) { .brand-text.with-logo { display: none; } }

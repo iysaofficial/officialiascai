@@ -22,7 +22,7 @@ export type Paket = {
   id: string; nama: string; harga: number; moda: string; asal: "indonesian" | "international" | string;
   wilayah: string; mode_harga: string; manfaat: string[]; min_anggota: number; maks_anggota: number;
 };
-export type Kategori = { id: string; nama: string; keterangan: string; tipe: string };
+export type Kategori = { id: string; nama: string; keterangan: string; tipe: string; ikon?: string | null };
 export type Pendaftaran = {
   dibuka: boolean; buka_at: string | null; tutup_at: string | null; moda: string;
   jenjang: string[]; paket: Paket[]; kategori: Kategori[];

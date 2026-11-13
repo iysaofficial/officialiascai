@@ -202,3 +202,17 @@ p { margin: 0; }
 .footer-brand p { font-size: 13.5px; color: rgba(255,255,255,.6); }
 .footer a { color: #fff; }
 .footer-org, .footer-copy { font-size: 14px; }
+
+/* ── organiser logo in nav + category icons ── */
+.brand-logo {
+  height: 40px; width: auto; display: block;
+  border-radius: 8px; background: #fff; padding: 2px 4px;
+}
+.brand-text.with-logo { padding-left: 12px; border-left: 1px solid var(--line); }
+@media (max-width: 420px) { .brand-text.with-logo { display: none; } }
+.card-top { display: flex; align-items: center; justify-content: space-between; }
+.card-icon {
+  display: inline-grid; place-items: center; width: 44px; height: 44px; border-radius: 12px; color: #fff;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+}
+.card-top + h3 { margin-top: 16px; }

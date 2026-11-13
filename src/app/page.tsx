@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CategoryIcon } from "@/components/CategoryIcon";
 import { Header } from "@/components/Header";
 import { Footer, CONTACT } from "@/components/Footer";
 import {
@@ -30,7 +31,7 @@ export default async function Home() {
 
   return (
     <>
-      <Header year={id?.tahun} />
+      <Header year={id?.tahun} lembaga={id?.lembaga} />
 
       <main>
         {/* ── Hero ── */}
@@ -110,7 +111,10 @@ export default async function Home() {
               <ul className="cards">
                 {categories.map((k, i) => (
                   <li key={k.id} className="card">
-                    <span className="card-num">{String(i + 1).padStart(2, "0")}</span>
+                    <div className="card-top">
+                      <CategoryIcon name={k.ikon} />
+                      <span className="card-num">{String(i + 1).padStart(2, "0")}</span>
+                    </div>
                     <h3>{k.nama}</h3>
                     {k.keterangan && <p>{k.keterangan.trim()}</p>}
                   </li>

@@ -17,7 +17,7 @@ export default async function Registration() {
 
   return (
     <>
-      <Header year={id?.tahun} />
+      <Header year={id?.tahun} lembaga={id?.lembaga} />
       <main>
         <section className="page-head">
           <div className="shell">

@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { Mark } from "./Mark";
 
+export type Lembaga = { singkatan: string; nama: string; logo: string | null } | null | undefined;
+
 const NAV = [
   { href: "/#about", label: "About" },
   { href: "/#categories", label: "Categories" },
@@ -10,13 +12,23 @@ const NAV = [
   { href: "/#contact", label: "Contact" },
 ];
 
-export function Header({ year }: { year?: string }) {
+/**
+ * Nav logo = the organiser's default logo (lembaga of the edition, falling back to
+ * the series' lembaga — resolved by the dashboard as `identitas.lembaga`).
+ * When the dashboard has no logo, the IASCAI mark is used.
+ */
+export function Header({ year, lembaga }: { year?: string; lembaga?: Lembaga }) {
   return (
     <header className="header">
       <div className="shell header-row">
         <Link href="/" className="brand" aria-label="IASCAI home">
-          <Mark />
-          <span>
+          {lembaga?.logo ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={lembaga.logo} alt={lembaga.nama} className="brand-logo" width={400} height={225} />
+          ) : (
+            <Mark />
+          )}
+          <span className={lembaga?.logo ? "brand-text with-logo" : "brand-text"}>
             <strong>IASCAI</strong>
             {year && <small>{year}</small>}
           </span>

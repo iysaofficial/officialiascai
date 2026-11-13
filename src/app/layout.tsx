@@ -1,8 +1,12 @@
 import type { Metadata, Viewport } from "next";
-import { Plus_Jakarta_Sans } from "next/font/google";
+import { Inter, Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const font = Plus_Jakarta_Sans({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"], variable: "--font" });
+/* Type system: Space Grotesk for display (titles, prices, numbers), Inter for
+   reading text, JetBrains Mono for labels, dates and indices. */
+const display = Space_Grotesk({ subsets: ["latin"], weight: ["500", "600", "700"], variable: "--font-display" });
+const body = Inter({ subsets: ["latin"], variable: "--font-body" });
+const mono = JetBrains_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-mono" });
 
 export const metadata: Metadata = {
   title: { default: "IASCAI — International Applied Science Competition on Artificial Intelligence", template: "%s · IASCAI" },
@@ -16,7 +20,7 @@ export const viewport: Viewport = { themeColor: "#0b1230" };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={font.variable}>
+    <html lang="en" className={`${display.variable} ${body.variable} ${mono.variable}`}>
       <body>
         {children}
         {/* IYSA dashboard embeds. Plain <script> on purpose: the loaders read their

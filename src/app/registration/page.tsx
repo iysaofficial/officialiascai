@@ -21,7 +21,7 @@ export default async function Registration() {
       <main>
         <section className="page-head">
           <div className="shell">
-            <p className="eyebrow eyebrow-light">Registration</p>
+            <p className="kicker"><span className="kicker-dot" />Registration</p>
             <h1>
               {state === "open" ? `Registration for ${title} is open`
                 : state === "closed" ? `Registration for ${title} has closed`
@@ -57,7 +57,7 @@ export default async function Registration() {
           </div>
         </section>
       </main>
-      <Footer organizer={id?.lembaga?.nama} />
+      <Footer organizer={id?.lembaga?.nama} lembaga={id?.lembaga} />
     </>
   );
 }

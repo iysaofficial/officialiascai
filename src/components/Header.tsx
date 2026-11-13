@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { Mark } from "./Mark";
+import { MobileNav } from "./MobileNav";
 
 export type Lembaga = { singkatan: string; nama: string; logo: string | null } | null | undefined;
 
-const NAV = [
+export const NAV = [
   { href: "/#about", label: "About" },
   { href: "/#categories", label: "Categories" },
   { href: "/#timeline", label: "Timeline" },
@@ -37,8 +38,9 @@ export function Header({ year, lembaga }: { year?: string; lembaga?: Lembaga }) 
           {NAV.map((n) => <a key={n.href} href={n.href}>{n.label}</a>)}
         </nav>
         <div className="header-cta">
-          <button type="button" className="btn btn-ghost btn-sm" data-iysa-panduan="IASCAI">Guidebook</button>
+          <button type="button" className="btn btn-ghost btn-sm hide-sm" data-iysa-panduan="IASCAI">Guidebook</button>
           <Link href="/registration" className="btn btn-primary btn-sm">Register</Link>
+          <MobileNav items={NAV} />
         </div>
       </div>
     </header>

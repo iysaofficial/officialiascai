@@ -7,7 +7,7 @@ import { Footer, CONTACT } from "@/components/Footer";
 import { SectionHead } from "@/components/SectionHead";
 import {
   getSections, formatDate, formatRange, splitList, registrationState,
-  WILAYAH, JENJANG, type Milestone, type Paket,
+  JENJANG, type Milestone,
 } from "@/lib/api";
 
 export const revalidate = 300;
@@ -23,24 +23,6 @@ function daysUntil(iso?: string | null): number | null {
   return Math.round((d.getTime() - today.getTime()) / 86_400_000);
 }
 
-/** "Online + Certificate and Medal (South East Asia) IASCAI" → name without the series and the region repeat. */
-function packageName(p: Paket): string {
-  let n = p.nama.replace(/\s*IASCAI$/i, "").trim();
-  if (WILAYAH[p.wilayah]) n = n.replace(/\s*\([^)]*\)\s*$/, "").trim();
-  return n;
-}
-
-function Price({ p }: { p: Paket }) {
-  const idr = p.asal === "indonesian";
-  return (
-    <p className="price">
-      <span className="price-cur">{idr ? "IDR" : "USD"}</span>
-      <span className="price-num">{p.harga.toLocaleString(idr ? "id-ID" : "en-US")}</span>
-      <span className="price-unit">/ team</span>
-    </p>
-  );
-}
-
 export default async function Home() {
   const s = await getSections(["identitas", "jadwal_kegiatan", "timeline", "pendaftaran", "guidebook"]);
   const id = s?.identitas;
@@ -53,8 +35,6 @@ export default async function Home() {
   const nextIdx = schedule.findIndex((m) => m.tanggal >= today);
   const categories = (reg?.kategori ?? []).map((k) => ({ ...k, nama: k.nama.trim() }));
   const packages = reg?.paket ?? [];
-  const intl = packages.filter((p) => p.asal !== "indonesian");
-  const indo = packages.filter((p) => p.asal === "indonesian");
   const docs = (s?.guidebook?.berkas ?? []).filter((b) => b.url);
   const hasGuidebook = Boolean(s?.guidebook?.url);
   const online = id?.lokasi?.daring?.replace(/\s+/g, " ").replace(/ Meeting$/i, "").trim();
@@ -192,37 +172,6 @@ export default async function Home() {
                   );
                 })}
               </ol>
-            </div>
-          </section>
-        )}
-
-        {/* ── Fees ── */}
-        {packages.length > 0 && (
-          <section id="fees" className="section section-alt">
-            <div className="shell sec">
-              <SectionHead label="Fees" title="Registration fees"
-                lead={`Per team${team ? ` of ${team} members` : ""}. Choose the package for where your team is based.`} />
-              <div>
-                {[{ title: "International participants", list: intl }, { title: "Indonesian participants", list: indo }]
-                  .filter((g) => g.list.length)
-                  .map((g) => (
-                    <div key={g.title} className="fee-group">
-                      <p className="label">{g.title}</p>
-                      <ul className="fees">
-                        {g.list.map((p) => (
-                          <li key={p.id} className="fee">
-                            <p className="fee-name">{packageName(p)}</p>
-                            {WILAYAH[p.wilayah] && <p className="fee-region label">{WILAYAH[p.wilayah]}</p>}
-                            <Price p={p} />
-                            <ul className="fee-benefits">
-                              {p.manfaat.map((b, i) => <li key={i}>{b.replace(/\.$/, "")}</li>)}
-                            </ul>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
-              </div>
             </div>
           </section>
         )}

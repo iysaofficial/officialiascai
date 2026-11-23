@@ -50,7 +50,7 @@ export default async function Registration() {
                   <button type="button" className="btn btn-line" data-iysa-panduan="IASCAI" data-iysa-panduan-jenis="tnc">
                     Terms &amp; Conditions
                   </button>
-                  <Link href="/#fees" className="btn btn-primary">See fees &amp; packages</Link>
+                  <Link href="/#categories" className="btn btn-primary">See the categories</Link>
                 </div>
               </div>
             )}

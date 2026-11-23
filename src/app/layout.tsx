@@ -1,12 +1,12 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Space_Grotesk, JetBrains_Mono } from "next/font/google";
+import { Newsreader, IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 
-/* Type system: Space Grotesk for display (titles, prices, numbers), Inter for
-   reading text, JetBrains Mono for labels, dates and indices. */
-const display = Space_Grotesk({ subsets: ["latin"], weight: ["500", "600", "700"], variable: "--font-display" });
-const body = Inter({ subsets: ["latin"], variable: "--font-body" });
-const mono = JetBrains_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-mono" });
+/* Type system: Newsreader (serif) for titles and figures, IBM Plex Sans for
+   reading text, IBM Plex Mono for labels, dates and fees. */
+const display = Newsreader({ subsets: ["latin"], style: ["normal", "italic"], variable: "--font-display" });
+const body = IBM_Plex_Sans({ subsets: ["latin"], weight: ["400", "500", "600"], variable: "--font-body" });
+const mono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500", "600"], variable: "--font-mono" });
 
 export const metadata: Metadata = {
   title: { default: "IASCAI — International Applied Science Competition on Artificial Intelligence", template: "%s · IASCAI" },
@@ -16,7 +16,12 @@ export const metadata: Metadata = {
   openGraph: { type: "website", siteName: "IASCAI" },
 };
 
-export const viewport: Viewport = { themeColor: "#0b1230" };
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f4f1ea" },
+    { media: "(prefers-color-scheme: dark)", color: "#12110e" },
+  ],
+};
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

@@ -15,10 +15,10 @@ const byName = (name: string): LucideIcon | undefined =>
   ((Lucide as unknown as Record<string, LucideIcon>)[name]);
 
 export function CategoryIcon({ name }: { name?: string | null }) {
-  const Icon = (name && byName(name)) || Lucide.Sparkles;
+  const Icon = (name && byName(name)) || Lucide.Circle;
   return (
-    <span className="card-icon" aria-hidden="true">
-      <Icon size={22} strokeWidth={1.8} />
+    <span className="cat-icon" aria-hidden="true">
+      <Icon size={22} strokeWidth={1.5} />
     </span>
   );
 }

@@ -21,7 +21,7 @@ export default async function Registration() {
       <main>
         <section className="page-head">
           <div className="shell">
-            <p className="kicker"><span className="kicker-dot" />Registration</p>
+            <p className="label">Registration</p>
             <h1>
               {state === "open" ? `Registration for ${title} is open`
                 : state === "closed" ? `Registration for ${title} has closed`
@@ -47,7 +47,7 @@ export default async function Registration() {
                       : "Registration information is not available right now. Please try again shortly."}
                 </p>
                 <div className="notice-btns">
-                  <button type="button" className="btn btn-ghost" data-iysa-panduan="IASCAI" data-iysa-panduan-jenis="tnc">
+                  <button type="button" className="btn btn-line" data-iysa-panduan="IASCAI" data-iysa-panduan-jenis="tnc">
                     Terms &amp; Conditions
                   </button>
                   <Link href="/#fees" className="btn btn-primary">See fees &amp; packages</Link>

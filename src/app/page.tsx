@@ -1,10 +1,9 @@
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, CalendarDays, Check, Globe2, GraduationCap, Mail, MessageCircle, AtSign, PlayCircle } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { CategoryIcon } from "@/components/CategoryIcon";
 import { CategoryCard } from "@/components/CategoryCard";
 import { Header } from "@/components/Header";
 import { Footer, CONTACT } from "@/components/Footer";
-import { NeuralArt } from "@/components/NeuralArt";
 import { SectionHead } from "@/components/SectionHead";
 import {
   getSections, formatDate, formatRange, splitList, registrationState,
@@ -58,137 +57,112 @@ export default async function Home() {
   const indo = packages.filter((p) => p.asal === "indonesian");
   const docs = (s?.guidebook?.berkas ?? []).filter((b) => b.url);
   const hasGuidebook = Boolean(s?.guidebook?.url);
-  const online = id?.lokasi?.daring?.replace(/\s+/g, " ").trim();
+  const online = id?.lokasi?.daring?.replace(/\s+/g, " ").replace(/ Meeting$/i, "").trim();
   const deadline = schedule.find((m) => /registration/i.test(m.milestone))?.tanggal || id?.pendaftaran_tutup || "";
   const leftDays = daysUntil(deadline);
   const team = packages[0] ? `${packages[0].min_anggota}–${packages[0].maks_anggota}` : null;
+  const org = id?.lembaga?.nama ?? "Indonesian Young Scientist Association";
 
-  let n = 0;
-  const num = () => String(++n).padStart(2, "0");
+  const statusText =
+    state === "open" ? "Registration open"
+      : state === "closed" ? "Registration closed"
+      : "Registration not yet open";
 
   return (
     <>
       <Header year={id?.tahun} lembaga={id?.lembaga} />
 
       <main>
-        {/* ── Hero ── */}
+        {/* ── Hero: title + spec sheet ── */}
         <section className="hero">
-          <div className="hero-grid" aria-hidden="true" />
-          <div className="shell hero-inner">
-            <div className="hero-copy">
-              <p className="kicker">
-                <span className="kicker-dot" />
-                {id?.lembaga?.singkatan ?? "IYSA"} presents · {id?.tahun ?? ""} edition
-              </p>
-              <h1 className="hero-title">
-                {id?.nama ? (
-                  <>
-                    International Applied Science Competition on{" "}
-                    <span className="grad">Artificial Intelligence</span>
-                  </>
-                ) : FALLBACK_NAME}
-              </h1>
-              <p className="hero-lead">
-                An international stage for students and young researchers to present applied science projects powered
-                by artificial intelligence — judged online by experts from around the world.
-              </p>
-
-              <div className="hero-cta">
-                <Link href="/registration" className="btn btn-primary">
-                  {state === "open" ? "Register now" : "Registration info"} <ArrowRight size={18} />
-                </Link>
-                <button type="button" className="btn btn-glass" data-iysa-panduan="IASCAI">
-                  {hasGuidebook ? "Guidebook" : "Terms & Conditions"}
-                </button>
-              </div>
-
-              <p className="hero-status">
-                <span className={`dot dot-${state}`} />
-                {state === "open"
-                  ? leftDays != null && leftDays >= 0
-                    ? `Registration is open · closes in ${leftDays} day${leftDays === 1 ? "" : "s"}`
-                    : "Registration is open"
-                  : state === "closed"
-                    ? "Registration for this edition has closed"
-                    : `Registration opens soon${deadline ? ` · deadline ${formatDate(deadline)}` : ""}`}
-              </p>
-            </div>
-            <NeuralArt />
-          </div>
-
           <div className="shell">
-            <dl className="facts">
-              {id?.mulai && (
-                <div className="fact">
-                  <CalendarDays size={18} />
-                  <dt>Event period</dt>
-                  <dd>{formatRange(id.mulai, id.selesai)}</dd>
+            <div className="hero-top">
+              <p className="label">{org}</p>
+              <p className="label">{id?.tahun ? `${id.tahun} edition · online` : "Online competition"}</p>
+            </div>
+
+            <div className="hero-main">
+              <div>
+                <h1 className="hero-title">
+                  International Applied Science Competition on <em>Artificial Intelligence</em>
+                </h1>
+                <p className="hero-lead">
+                  Students and young researchers present applied science projects built with artificial
+                  intelligence, and are judged online by an international panel.
+                </p>
+                <div className="hero-cta">
+                  <Link href="/registration" className="btn btn-primary">
+                    {state === "open" ? "Register your team" : "Registration details"} <ArrowRight size={18} />
+                  </Link>
+                  <button type="button" className="btn btn-line" data-iysa-panduan="IASCAI">
+                    {hasGuidebook ? "Read the guidebook" : "Terms & conditions"}
+                  </button>
                 </div>
-              )}
-              <div className="fact">
-                <Globe2 size={18} />
-                <dt>Format</dt>
-                <dd>Online{online ? ` via ${online.replace(/ Meeting$/i, "")}` : ""}</dd>
               </div>
-              {reg?.jenjang?.length ? (
-                <div className="fact">
-                  <GraduationCap size={18} />
-                  <dt>Open to</dt>
-                  <dd>{reg.jenjang.map((j) => JENJANG[j] ?? j).join(" · ")}</dd>
+
+              <dl className="spec">
+                {id?.mulai && (
+                  <div className="spec-row"><dt>Competition</dt><dd>{formatRange(id.mulai, id.selesai)}</dd></div>
+                )}
+                {deadline && (
+                  <div className="spec-row"><dt>Register by</dt><dd>{formatDate(deadline)}</dd></div>
+                )}
+                <div className="spec-row"><dt>Format</dt><dd>Online{online ? `, via ${online}` : ""}</dd></div>
+                {reg?.jenjang?.length ? (
+                  <div className="spec-row"><dt>Open to</dt><dd>{reg.jenjang.map((j) => JENJANG[j] ?? j).join(", ")}</dd></div>
+                ) : null}
+                {team && <div className="spec-row"><dt>Team size</dt><dd>{team} members</dd></div>}
+                {categories.length > 0 && (
+                  <div className="spec-row"><dt>Categories</dt><dd>{categories.length} fields</dd></div>
+                )}
+                <div className="spec-status">
+                  <p className={`status ${state}`}>{statusText}</p>
+                  {state !== "closed" && leftDays != null && leftDays >= 0 && (
+                    <p className="countdown"><b>{leftDays}</b><span>day{leftDays === 1 ? "" : "s"} until the registration deadline</span></p>
+                  )}
                 </div>
-              ) : null}
-              {categories.length > 0 && (
-                <div className="fact">
-                  <span className="fact-big">{categories.length}</span>
-                  <dt>Categories</dt>
-                  <dd>Teams of {team ?? "1–6"}</dd>
-                </div>
-              )}
-            </dl>
+              </dl>
+            </div>
           </div>
         </section>
 
         {/* ── About ── */}
         <section id="about" className="section">
-          <div className="shell">
-            <SectionHead num={num()} label="About" title="Artificial intelligence, applied to real problems" />
-            <div className="about">
-              {about.length ? (
+          <div className="shell sec">
+            <SectionHead label="About" title="The competition" />
+            <div>
+              <div className="about">
+                {about.length ? (
+                  <>
+                    <p className="about-lead">{about[0]}</p>
+                    {about.slice(1).map((p, i) => <p key={i}>{p}</p>)}
+                  </>
+                ) : (
+                  <p className="about-lead">
+                    IASCAI is an international platform for students and young researchers to present applied science
+                    projects that integrate artificial intelligence with multidisciplinary approaches.
+                  </p>
+                )}
+              </div>
+              {objectives.length > 0 && (
                 <>
-                  <p className="about-lead">{about[0]}</p>
-                  {about.slice(1).map((p, i) => <p key={i}>{p}</p>)}
+                  <p className="label sub">Objectives</p>
+                  <ol className="objectives">
+                    {objectives.map((o, i) => <li key={i}><p>{o}</p></li>)}
+                  </ol>
                 </>
-              ) : (
-                <p className="about-lead">
-                  IASCAI is an international platform for students and young researchers to present applied science
-                  projects that integrate artificial intelligence with multidisciplinary approaches.
-                </p>
               )}
             </div>
-
-            {objectives.length > 0 && (
-              <>
-                <h3 className="sub">Objectives</h3>
-                <ol className="objectives">
-                  {objectives.map((o, i) => (
-                    <li key={i}>
-                      <span className="mono-num">{String(i + 1).padStart(2, "0")}</span>
-                      <p>{o}</p>
-                    </li>
-                  ))}
-                </ol>
-              </>
-            )}
           </div>
         </section>
 
         {/* ── Categories ── */}
         {categories.length > 0 && (
-          <section id="categories" className="section section-sunk">
-            <div className="shell">
-              <SectionHead num={num()} label="Categories" title={`${categories.length} fields to compete in`}
-                lead="Pick the field that fits your project. Every category is judged by specialists in that area." />
-              <ul className="cards">
+          <section id="categories" className="section section-alt">
+            <div className="shell sec">
+              <SectionHead label="Categories" title={`${categories.length} fields`}
+                lead="Every project is entered in one field and judged by specialists in it." />
+              <ul className="cats">
                 {categories.map((k, i) => (
                   <CategoryCard key={k.id} icon={<CategoryIcon name={k.ikon} />} num={String(i + 1).padStart(2, "0")}
                     title={k.nama} text={(k.keterangan ?? "").trim()} />
@@ -201,23 +175,19 @@ export default async function Home() {
         {/* ── Timeline ── */}
         {schedule.length > 0 && (
           <section id="timeline" className="section">
-            <div className="shell">
-              <SectionHead num={num()} label="Timeline" title="Important dates"
-                lead="All times follow Western Indonesia Time (WIB, UTC+7)." />
-              <ol className="timeline">
+            <div className="shell sec">
+              <SectionHead label="Timeline" title="Schedule" lead="Times are Western Indonesia Time (WIB, UTC+7)." />
+              <ol className="sched">
                 {schedule.map((m, i) => {
-                  const past = m.tanggal && m.tanggal < today;
+                  const past = Boolean(m.tanggal && m.tanggal < today);
                   return (
                     <li key={i} className={`${past ? "past" : ""} ${i === nextIdx ? "next" : ""}`}>
-                      <time dateTime={m.tanggal}>
-                        <span className="t-day">{formatDate(m.tanggal, { month: undefined, year: undefined })}</span>
-                        <span className="t-mon">{formatDate(m.tanggal, { day: undefined, month: "short" })}</span>
-                      </time>
-                      <div className="t-body">
+                      <time dateTime={m.tanggal}>{formatDate(m.tanggal)}</time>
+                      <div>
                         <strong>{m.milestone.trim()}</strong>
-                        {m.lokasi && <span>{m.lokasi}</span>}
+                        {m.lokasi && <span className="loc">{m.lokasi}</span>}
                       </div>
-                      {i === nextIdx && <span className="badge">Next</span>}
+                      {i === nextIdx ? <span className="tag">Next</span> : past ? <span className="tag" style={{ color: "var(--ink-muted)" }}>Done</span> : <span />}
                     </li>
                   );
                 })}
@@ -228,99 +198,83 @@ export default async function Home() {
 
         {/* ── Fees ── */}
         {packages.length > 0 && (
-          <section id="fees" className="section section-sunk">
-            <div className="shell">
-              <SectionHead num={num()} label="Fees" title="Registration packages"
-                lead={`Fees are per team${team ? ` of ${team} members` : ""}. Choose the package for where your team is based.`} />
-
-              {[{ title: "International participants", list: intl }, { title: "Indonesian participants", list: indo }]
-                .filter((g) => g.list.length)
-                .map((g) => (
-                  <div key={g.title} className="fee-group">
-                    <h3 className="sub">{g.title}</h3>
-                    <ul className="fees">
-                      {g.list.map((p) => (
-                        <li key={p.id} className="fee">
-                          <div className="fee-head">
+          <section id="fees" className="section section-alt">
+            <div className="shell sec">
+              <SectionHead label="Fees" title="Registration fees"
+                lead={`Per team${team ? ` of ${team} members` : ""}. Choose the package for where your team is based.`} />
+              <div>
+                {[{ title: "International participants", list: intl }, { title: "Indonesian participants", list: indo }]
+                  .filter((g) => g.list.length)
+                  .map((g) => (
+                    <div key={g.title} className="fee-group">
+                      <p className="label">{g.title}</p>
+                      <ul className="fees">
+                        {g.list.map((p) => (
+                          <li key={p.id} className="fee">
                             <p className="fee-name">{packageName(p)}</p>
-                            {WILAYAH[p.wilayah] && <p className="fee-region">{WILAYAH[p.wilayah]}</p>}
-                          </div>
-                          <Price p={p} />
-                          <ul className="fee-benefits">
-                            {p.manfaat.map((b, i) => (
-                              <li key={i}><Check size={16} />{b.replace(/\.$/, "")}</li>
-                            ))}
-                          </ul>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
+                            {WILAYAH[p.wilayah] && <p className="fee-region label">{WILAYAH[p.wilayah]}</p>}
+                            <Price p={p} />
+                            <ul className="fee-benefits">
+                              {p.manfaat.map((b, i) => <li key={i}>{b.replace(/\.$/, "")}</li>)}
+                            </ul>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+              </div>
             </div>
           </section>
         )}
 
-        {/* ── CTA ── */}
-        <section className="section section-tight">
-          <div className="shell">
-            <div className="cta">
-              <div>
-                <h2>Ready to put your AI project on an international stage?</h2>
-                <p>
-                  {deadline && state !== "closed"
-                    ? `Register before ${formatDate(deadline)}. Read the ${hasGuidebook ? "guidebook" : "terms & conditions"} first.`
-                    : "Read the terms & conditions, then register your team."}
-                </p>
-              </div>
-              <div className="cta-btns">
-                <Link href="/registration" className="btn btn-light">Register <ArrowRight size={18} /></Link>
-                {hasGuidebook && (
-                  <button type="button" className="btn btn-glass" data-iysa-panduan="IASCAI">Guidebook</button>
-                )}
-                {docs.map((d) => (
-                  <a key={d.jenis} href={d.url!} target="_blank" rel="noreferrer" className="btn btn-glass"
-                     data-iysa-panduan="IASCAI" data-iysa-panduan-jenis={d.jenis}>
-                    {d.judul_en ?? d.judul}
-                  </a>
-                ))}
-              </div>
+        {/* ── Deadline band ── */}
+        <section className="band">
+          <div className="shell band-row">
+            <div>
+              <p className="label">{statusText}</p>
+              <h2>
+                {state === "closed" ? "See you next edition"
+                  : deadline ? <>Register by {formatDate(deadline)}</> : "Register your team"}
+              </h2>
+              <p className="note">
+                {hasGuidebook
+                  ? "Read the guidebook and the terms & conditions before you register."
+                  : "Read the terms & conditions before you register."}
+              </p>
+            </div>
+            <div className="btns">
+              <Link href="/registration" className="btn btn-primary">Registration <ArrowRight size={18} /></Link>
+              {hasGuidebook && <button type="button" className="btn btn-line" data-iysa-panduan="IASCAI">Guidebook</button>}
+              {docs.filter((d) => d.jenis !== "guidebook").map((d) => (
+                <a key={d.jenis} href={d.url!} target="_blank" rel="noreferrer" className="btn btn-line"
+                   data-iysa-panduan="IASCAI" data-iysa-panduan-jenis={d.jenis}>
+                  {d.judul_en ?? d.judul}
+                </a>
+              ))}
             </div>
           </div>
         </section>
 
         {/* ── Contact ── */}
         <section id="contact" className="section">
-          <div className="shell">
-            <SectionHead num={num()} label="Contact" title="Questions? Talk to us" />
+          <div className="shell sec">
+            <SectionHead label="Contact" title="Questions" lead="The committee answers on WhatsApp and email." />
             <ul className="contact">
-              <li>
-                <a href={`https://wa.me/${(id?.kontak?.whatsapp || CONTACT.whatsapp.number).replace(/\D/g, "")}`} target="_blank" rel="noreferrer">
-                  <MessageCircle size={20} />
-                  <span><small>WhatsApp</small>{id?.kontak?.whatsapp || CONTACT.whatsapp.display}</span>
-                  <ArrowUpRight size={16} className="go" />
-                </a>
-              </li>
-              <li>
-                <a href={`mailto:${id?.kontak?.surel || CONTACT.email}`}>
-                  <Mail size={20} />
-                  <span><small>Email</small>{id?.kontak?.surel || CONTACT.email}</span>
-                  <ArrowUpRight size={16} className="go" />
-                </a>
-              </li>
-              <li>
-                <a href={CONTACT.instagram} target="_blank" rel="noreferrer">
-                  <AtSign size={20} />
-                  <span><small>Instagram</small>@iysa_official</span>
-                  <ArrowUpRight size={16} className="go" />
-                </a>
-              </li>
-              <li>
-                <a href={CONTACT.youtube} target="_blank" rel="noreferrer">
-                  <PlayCircle size={20} />
-                  <span><small>YouTube</small>@IYSAOfficial</span>
-                  <ArrowUpRight size={16} className="go" />
-                </a>
-              </li>
+              {[
+                { k: "WhatsApp", v: id?.kontak?.whatsapp || CONTACT.whatsapp.display,
+                  href: `https://wa.me/${(id?.kontak?.whatsapp || CONTACT.whatsapp.number).replace(/\D/g, "")}` },
+                { k: "Email", v: id?.kontak?.surel || CONTACT.email, href: `mailto:${id?.kontak?.surel || CONTACT.email}` },
+                { k: "Instagram", v: "@iysa_official", href: CONTACT.instagram },
+                { k: "YouTube", v: "@IYSAOfficial", href: CONTACT.youtube },
+              ].map((c) => (
+                <li key={c.k}>
+                  <a href={c.href} target={c.href.startsWith("mailto") ? undefined : "_blank"} rel="noreferrer">
+                    <span className="label">{c.k}</span>
+                    <span>{c.v}</span>
+                    <ArrowUpRight size={16} className="go" />
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
         </section>

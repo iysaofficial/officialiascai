@@ -1,4 +1,3 @@
-import { Mark } from "./Mark";
 import { NAV, type Lembaga } from "./Header";
 
 export const CONTACT = {
@@ -13,9 +12,8 @@ export function Footer({ organizer, lembaga }: { organizer?: string; lembaga?: L
   return (
     <footer className="footer">
       <div className="shell footer-grid">
-        <div className="footer-brand">
-          <div className="footer-mark"><Mark size={30} /><strong>IASCAI</strong></div>
-          <p>International Applied Science Competition on Artificial Intelligence.</p>
+        <div>
+          <p className="footer-name">International Applied Science Competition on Artificial Intelligence</p>
           <p className="footer-org">
             Organised by{" "}
             <a href={CONTACT.site} target="_blank" rel="noreferrer">{organizer ?? "Indonesian Young Scientist Association"}</a>
@@ -26,20 +24,20 @@ export function Footer({ organizer, lembaga }: { organizer?: string; lembaga?: L
           )}
         </div>
         <nav className="footer-col" aria-label="Footer">
-          <p className="footer-h">Explore</p>
+          <p className="label">Pages</p>
           {NAV.map((n) => <a key={n.href} href={n.href}>{n.label}</a>)}
           <a href="/registration">Registration</a>
         </nav>
         <div className="footer-col">
-          <p className="footer-h">Contact</p>
+          <p className="label">Contact</p>
           <a href={`https://wa.me/${CONTACT.whatsapp.number}`} target="_blank" rel="noreferrer">WhatsApp {CONTACT.whatsapp.display}</a>
           <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
           <a href={CONTACT.instagram} target="_blank" rel="noreferrer">Instagram</a>
           <a href={CONTACT.youtube} target="_blank" rel="noreferrer">YouTube</a>
         </div>
       </div>
-      <div className="shell footer-bottom">
-        <p>© {new Date().getFullYear()} Indonesian Young Scientist Association. All rights reserved.</p>
+      <div className="shell">
+        <p className="footer-bottom">© {new Date().getFullYear()} Indonesian Young Scientist Association</p>
       </div>
     </footer>
   );

@@ -59,8 +59,11 @@ function HeaderNav() {
         {NAV.map((n) => <a key={n.href} href={n.href}>{n.label}</a>)}
       </nav>
       <div className="header-cta">
-        <button type="button" className="btn btn-line btn-sm hide-sm" data-iysa-panduan="IASCAI">Guidebook</button>
-        <Link href="/registration" className="btn btn-primary btn-sm">Register</Link>
+        {/* Shown/hidden live by embed/status.js from the dashboard toggles (no redeploy):
+            Guidebook only once published, Register only while registration is open. */}
+        <button type="button" className="btn btn-line btn-sm hide-sm" data-iysa-panduan="IASCAI" data-iysa-tampil="guidebook">Guidebook</button>
+        <Link href="/registration" className="btn btn-primary btn-sm" data-iysa-tampil="dibuka">Register</Link>
+        <Link href="/registration" className="btn btn-line btn-sm" data-iysa-tampil="ditutup">Registration opens soon</Link>
         <MobileNav items={NAV} />
       </div>
     </>

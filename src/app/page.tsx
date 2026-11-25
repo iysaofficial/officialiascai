@@ -71,11 +71,18 @@ export default async function Home() {
                   intelligence, and are judged online by an international panel.
                 </p>
                 <div className="hero-cta">
-                  <Link href="/registration" className="btn btn-primary">
-                    {state === "open" ? "Register your team" : "Registration details"} <ArrowRight size={18} />
+                  {/* data-iysa-tampil: switched live by embed/status.js from the dashboard. */}
+                  <Link href="/registration" className="btn btn-primary" data-iysa-tampil="dibuka">
+                    Register your team <ArrowRight size={18} />
                   </Link>
-                  <button type="button" className="btn btn-line" data-iysa-panduan="IASCAI">
-                    {hasGuidebook ? "Read the guidebook" : "Terms & conditions"}
+                  <Link href="/registration" className="btn btn-primary" data-iysa-tampil="ditutup">
+                    Registration details <ArrowRight size={18} />
+                  </Link>
+                  <button type="button" className="btn btn-line" data-iysa-panduan="IASCAI" data-iysa-tampil="guidebook">
+                    Read the guidebook
+                  </button>
+                  <button type="button" className="btn btn-line" data-iysa-panduan="IASCAI" data-iysa-panduan-jenis="tnc" data-iysa-tampil="tanpa-guidebook">
+                    Terms &amp; conditions
                   </button>
                 </div>
               </div>
@@ -193,7 +200,7 @@ export default async function Home() {
             </div>
             <div className="btns">
               <Link href="/registration" className="btn btn-primary">Registration <ArrowRight size={18} /></Link>
-              {hasGuidebook && <button type="button" className="btn btn-line" data-iysa-panduan="IASCAI">Guidebook</button>}
+              <button type="button" className="btn btn-line" data-iysa-panduan="IASCAI" data-iysa-tampil="guidebook">Guidebook</button>
               {docs.filter((d) => d.jenis !== "guidebook").map((d) => (
                 <a key={d.jenis} href={d.url!} target="_blank" rel="noreferrer" className="btn btn-line"
                    data-iysa-panduan="IASCAI" data-iysa-panduan-jenis={d.jenis}>

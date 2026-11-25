@@ -12,7 +12,8 @@ export function MobileNav({ items }: { items: { href: string; label: string }[] 
       <summary aria-label="Menu"><Menu size={22} /></summary>
       <div className="mnav-panel">
         {items.map((n) => <a key={n.href} href={n.href} onClick={close}>{n.label}</a>)}
-        <button type="button" data-iysa-panduan="IASCAI" onClick={close}>Guidebook</button>
+        <button type="button" data-iysa-panduan="IASCAI" data-iysa-tampil="guidebook" onClick={close}>Guidebook</button>
+        <button type="button" data-iysa-panduan="IASCAI" data-iysa-panduan-jenis="tnc" onClick={close}>Terms &amp; Conditions</button>
       </div>
     </details>
   );

@@ -31,6 +31,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             own attributes through document.currentScript. */}
         <script src="https://api-dashboard.iysa.or.id/embed/kurasi.js" data-iysa-kurasi="iascai" defer />
         <script src="https://api-dashboard.iysa.or.id/embed/panduan.js" defer />
+        <script src="https://api-dashboard.iysa.or.id/embed/status.js" data-iysa-seri="IASCAI" defer />
       </body>
     </html>
   );

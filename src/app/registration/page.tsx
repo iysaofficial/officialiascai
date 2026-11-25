@@ -22,10 +22,11 @@ export default async function Registration() {
         <section className="page-head">
           <div className="shell">
             <p className="label">Registration</p>
+            {/* Status decided live in the browser (embed/status.js), not at build time,
+                so flipping the dashboard toggle shows here immediately. */}
             <h1>
-              {state === "open" ? `Registration for ${title} is open`
-                : state === "closed" ? `Registration for ${title} has closed`
-                : `Registration for ${title}`}
+              <span data-iysa-tampil="dibuka">Registration for {title} is open</span>
+              <span data-iysa-tampil="ditutup">Registration for {title}</span>
             </h1>
             {deadline && state !== "closed" && (
               <p className="hero-lead">Registration deadline: <strong>{formatDate(deadline)}</strong></p>
@@ -35,25 +36,19 @@ export default async function Registration() {
 
         <section className="section">
           <div className="shell narrow">
-            {state === "open" ? (
-              <RegistrationForm series="iascai" />
-            ) : (
-              <div className="notice">
-                <p>
-                  {state === "closed"
-                    ? "Registration for this edition is closed. Follow @iysa_official on Instagram for the next edition."
-                    : state === "soon"
-                      ? `Registration has not opened yet${id?.pendaftaran_buka ? ` — it opens on ${formatDate(id.pendaftaran_buka)}` : ""}. Please check back soon.`
-                      : "Registration information is not available right now. Please try again shortly."}
-                </p>
-                <div className="notice-btns">
-                  <button type="button" className="btn btn-line" data-iysa-panduan="IASCAI" data-iysa-panduan-jenis="tnc">
-                    Terms &amp; Conditions
-                  </button>
-                  <Link href="/#categories" className="btn btn-primary">See the categories</Link>
-                </div>
-              </div>
-            )}
+            {/* Same pattern as the other invention sites (OSPC, WECC): the dashboard form
+                (daftar.js) is always mounted and itself shows "registration is not open"
+                while the toggle is off, so the page never depends on a cached build. */}
+            <RegistrationForm series="iascai" />
+            <div className="notice-btns">
+              <button type="button" className="btn btn-line" data-iysa-panduan="IASCAI" data-iysa-tampil="guidebook">
+                Guidebook
+              </button>
+              <button type="button" className="btn btn-line" data-iysa-panduan="IASCAI" data-iysa-panduan-jenis="tnc">
+                Terms &amp; Conditions
+              </button>
+              <Link href="/#categories" className="btn btn-line">See the categories</Link>
+            </div>
           </div>
         </section>
       </main>

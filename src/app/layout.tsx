@@ -12,7 +12,6 @@ export const metadata: Metadata = {
   title: { default: "IASCAI — International Applied Science Competition on Artificial Intelligence", template: "%s · IASCAI" },
   description:
     "IASCAI is an international online competition by the Indonesian Young Scientist Association for students and young researchers presenting applied science projects built with artificial intelligence.",
-  icons: { icon: "/icon.svg" },
   openGraph: { type: "website", siteName: "IASCAI" },
 };
 

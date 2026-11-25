@@ -50,7 +50,7 @@ export default async function Home() {
 
   return (
     <>
-      <Header year={id?.tahun} lembaga={id?.lembaga} />
+      <Header year={id?.tahun} lembaga={id?.lembaga} logo={id?.logo} />
 
       <main>
         {/* ── Hero: title + spec sheet ── */}

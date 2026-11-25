@@ -12,11 +12,25 @@ export const NAV = [
 ];
 
 /**
- * Nav logo = the organiser's default logo (lembaga of the edition, falling back to
- * the series' lembaga — resolved by the dashboard as `identitas.lembaga`).
- * When the dashboard has no logo, the IASCAI mark is used.
+ * Nav logo = the edition's own logo (`identitas.logo`, Event → Edit → logo in the
+ * dashboard). It is the full IASCAI wordmark, so no text name is shown beside it.
+ * Without it: the organiser's logo (`identitas.lembaga`), then the IASCAI mark.
  */
-export function Header({ year, lembaga }: { year?: string; lembaga?: Lembaga }) {
+export function Header({ year, lembaga, logo }: { year?: string; lembaga?: Lembaga; logo?: string | null }) {
+  if (logo) {
+    return (
+      <header className="header">
+        <div className="shell header-row">
+          <Link href="/" className="brand" aria-label="IASCAI home">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={logo} alt="IASCAI" className="brand-event-logo" width={2560} height={480} />
+            {year && <span className="brand-text with-logo"><small>{year}</small></span>}
+          </Link>
+          <HeaderNav />
+        </div>
+      </header>
+    );
+  }
   return (
     <header className="header">
       <div className="shell header-row">
@@ -32,15 +46,23 @@ export function Header({ year, lembaga }: { year?: string; lembaga?: Lembaga }) 
             {year && <small>{year}</small>}
           </span>
         </Link>
-        <nav className="nav" aria-label="Main">
-          {NAV.map((n) => <a key={n.href} href={n.href}>{n.label}</a>)}
-        </nav>
-        <div className="header-cta">
-          <button type="button" className="btn btn-line btn-sm hide-sm" data-iysa-panduan="IASCAI">Guidebook</button>
-          <Link href="/registration" className="btn btn-primary btn-sm">Register</Link>
-          <MobileNav items={NAV} />
-        </div>
+        <HeaderNav />
       </div>
     </header>
+  );
+}
+
+function HeaderNav() {
+  return (
+    <>
+      <nav className="nav" aria-label="Main">
+        {NAV.map((n) => <a key={n.href} href={n.href}>{n.label}</a>)}
+      </nav>
+      <div className="header-cta">
+        <button type="button" className="btn btn-line btn-sm hide-sm" data-iysa-panduan="IASCAI">Guidebook</button>
+        <Link href="/registration" className="btn btn-primary btn-sm">Register</Link>
+        <MobileNav items={NAV} />
+      </div>
+    </>
   );
 }

@@ -101,9 +101,9 @@ export const WILAYAH: Record<string, string> = {
 
 export const JENJANG: Record<string, string> = {
   elementary: "Elementary school",
-  secondary: "Junior & senior high school",
+  secondary: "Junior & Senior high school",
   university: "University",
-};
+}
 
 /** Objectives are stored as one string separated by "|". */
 export const splitList = (s: string | null | undefined) =>
